@@ -102,7 +102,7 @@ io.on("connection", function(socket){
 });
 
 app.get("/login", function(req, res){
-    res.render("login_new");
+    res.render("login");
 });
 app.post("/login", jsonParser, function(req, res){
     console.log(req.body);
