@@ -106,4 +106,8 @@ app.get("/login", function(req, res){
 });
 app.post("/login", jsonParser, function(req, res){
     console.log(req.body);
+    var data = {
+        pass : req.body.pass
+    };
+    res.send(JSON.stringify(data));
 });
