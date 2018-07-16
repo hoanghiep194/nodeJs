@@ -1,5 +1,6 @@
-var socket = io("http://10.1.10.154:3000");
+var socket = io("http://10.1.10.204:3000");
 $(document).ready(function () {
+    $("#btnRegisterDiv").addClass("btnRegHidden");
     // Change forms
     $(".blmd-switch-button").click(function () {
         var _this = $(this);
@@ -21,13 +22,17 @@ $(document).ready(function () {
             $('#Register-form').addClass('form-hidden')
                 .removeClass('animate');
             $('#login-form').removeClass('form-hidden');
+            $('#btnLoginDiv').removeClass('btnLoginHidden');
+            $('#btnRegisterDiv').addClass('btnRegHidden');
         } else {
             fullRipper("#26a69a", 750);
             _this.addClass('active');
+            $('#btnLoginDiv').addClass('btnLoginHidden');
             setTimeout(function () {
                 $('#Register-form').removeClass('form-hidden')
                     .addClass('animate');
                 $('#login-form').addClass('form-hidden');
+                $('#btnRegisterDiv').removeClass('btnRegHidden');
             }, 2000)
 
         }
@@ -130,20 +135,63 @@ function fullRipper(color, time) {
 
 }
 
-function submitForm() {
-    var formdata = JSON.stringify($('#form').serializeObject());
-    console.log(formdata);
+function sendLogin() {
+    var formdata = JSON.stringify($('#login-form').serializeObject());
+    var action = $('#login-form').attr('action')
     $.ajax({
         type: 'POST',
-        url: $('#form').attr('action'),
-        data: JSON.stringify($('#form').serializeObject()),
+        url: action,
+        data: formdata,
         contentType: "application/json",
         success: function (response) {
-            var formResponse = JSON.parse(response);
-
+            var res = JSON.parse(response);
+            if (res.status == 200) {
+                $.redirect("/home", "", "GET", "", "", "");
+            }
         },
-        error: function (daresponseta) {
-            alert('error' + response);
+        error: function (errors) {
+            alert('error' + errors);
+            return false;
+        }
+    });
+}
+
+function sendRegister() {
+    var formdata = JSON.stringify($('#Register-form').serializeObject());
+    var action = $('#Register-form').attr('action')
+    $.ajax({
+        type: 'POST',
+        url: action,
+        data: formdata,
+        contentType: "application/json",
+        success: function (response) {
+            var res = JSON.parse(response);
+            if (res.status == 409) {
+                showDialog({
+                    title: 'Message',
+                    text: res.message,
+                    positive: {
+                        title: 'OK',
+                        onClick: function (e) {
+                            $.redirect("/login", "", "GET", "", "", "");
+                        }
+                    }
+                });
+            } else if (res.status == 200) {
+                showDialog({
+                    title: 'Message',
+                    text: res.message,
+                    positive: {
+                        title: 'OK',
+                        onClick: function (e) {
+                            $.redirect("/login", "", "GET", "", "", "");
+                        }
+                    }
+                });
+            }
+        },
+        error: function (errors) {
+            alert('error' + errors);
             return false;
         }
     });

@@ -1,0 +1,34 @@
+div#right {
+    float: left;
+    width: 215px;
+}
+div#left {
+    float: left;
+    width: 320px;
+    background-color: bisque;
+}
+div#message {
+    height: 300px;
+}
+input#btnSend {
+    width: 50px;
+}
+input#txtMessage {
+    width: 215px;
+}
+div#left-logout {
+    text-align: right;
+}
+div#info {
+    height: 50px;
+}
+div#inputMessage {
+    background-color: aliceblue;
+}
+div#room {
+    float: left;
+    margin-left: 5px;
+}
+.fileImage{
+    width: 80%;
+}
